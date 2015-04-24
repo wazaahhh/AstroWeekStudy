@@ -1,0 +1,11 @@
+## temp files
+.DS_Store
+*.*~
+
+## LaTeX
+*.aux
+*.log
+*.bbl
+*.blg
+*.toc
+*.pdf
