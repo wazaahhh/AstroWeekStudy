@@ -68,6 +68,58 @@ def retrieveAllUserInfo(username_list):
 
     return dic
 
+
+def pwlaw_fit_cont(dataset,threshold):
+    # Maximum Likelihood Hill Estimator 
+    # Use this method only for continuous distributions or if your threshold is superior to btw. 7 to 10
+    
+    
+    data = np.asarray(dataset)
+    data = data[data>=threshold]
+    n = len(data)
+    x = data/threshold
+    mu = n/sum(np.log(x))
+    
+    confidence = 2/np.sqrt(n)
+    
+    return mu,confidence,n
+
+
+def pwlaw_fit_disc(dataset,threshold=1,Newton_Iterations=20):
+    # For detailed Method please refer to the long version Paper:
+    # T.Maillart et al. Empirical Tests of Zipf's law Mechanism In Open Source Linux Distribution
+        
+    data = dataset[dataset>=threshold]
+    data = np.asarray(data)
+    
+    
+    I = np.asarray(range(threshold,250*threshold))/threshold
+    mu =0.    
+    
+    rhs = 1/float(len(data))*sum(np.log(data/threshold))
+    
+    #print 'sum log data', sum(N.log(data/threshold))
+    #print 'rhs',rhs
+    
+    for i in range(Newton_Iterations):
+        #print i
+        f = sum(np.log(I)/(I**(1+mu)))/sum(1/I**(1+mu))
+     
+        a = - sum((np.log(I)**2)/I**(1+mu))
+        b = sum(1/I**(1+mu))
+        c = sum(np.log(I)/I**(1+mu))
+        d = sum(1/I**(1+mu))
+        
+        fprime = (a*b-c**2)/(d**2)        
+        mu = mu + (rhs-f)/fprime
+        error = (rhs-f)/fprime
+        
+    #    mui = N.append(mui,mu)
+    #    eri = N.append(eri,2)
+       
+    return mu,error
+
+
 if __name__ == '__main__':
     print "blah"
     #user_events = 'users/%s'%'jakevdp'
