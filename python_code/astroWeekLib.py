@@ -119,6 +119,13 @@ def pwlaw_fit_disc(dataset,threshold=1,Newton_Iterations=20):
        
     return mu,error
 
+def countUnique(array):
+    return len(set(array))
+
+def rankorder(x):
+    x1 = np.sort(x)[::-1]
+    y1 = np.arange(1,len(x1)+1)
+    return x1,y1
 
 if __name__ == '__main__':
     print "blah"
