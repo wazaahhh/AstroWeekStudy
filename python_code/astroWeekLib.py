@@ -3,6 +3,7 @@ import json
 import requests
 import re
 import time
+import numpy as np
 
 username_list = ('jakevdp','ivezic','davidwhogg','profjsb','dhuppenkothen','drphilmarshall','fperez','kbarbary','jonathansick','Waelthus','nell-byler','jradavenport','gully','bareid','ogtelford','sofiatti','karenyyng','adrn','kapadia','rbiswas4','rhiannonlynne','lvrzhn','jmankin','wilmatrick','RuthAngus','nhuntwalker','ryanmaas','patti','yoachim','yalsayyad')
 

@@ -39,6 +39,46 @@ repos = ["https://github.com/AstroHackWeek",
          "https://github.com/patti/FHD_PyPE","https://github.com/dfm/kpsf"]
 
 
+repo_created_during_astroweek = ["https://github.com/dhuppenkothen/BayesPSD",
+                                 "https://github.com/dhuppenkothen/UTools",
+                                 "https://github.com/nhuntwalker/data_science",
+                                 "https://github.com/nhuntwalker/datahack_projects",
+                                 "https://github.com/yoachim/HackWeek2014",
+                                 "https://github.com/Waelthus/X-Ray-Time-Series",
+                                 "https://github.com/adrn/tilt-shift",
+                                 "https://github.com/adrn/blind-dating",
+                                 "https://github.com/jakevdp/BombScargle",
+                                 "https://github.com/jakevdp/noisyLS",
+                                 "https://github.com/gully/HETDEXtoy",
+                                 "https://github.com/BIDS/xi",
+                                 "https://github.com/jmankin/test",
+                                 "https://github.com/fperez/test",
+                                 "https://github.com/wilmatrick/test",
+                                 "https://github.com/RuthAngus/BlackHoleGP",
+                                 "https://github.com/alex-parker/ADR4Movie",
+                                 "https://github.com/jradavenport/FlareTests_AstroHackWeek",
+                                 "https://github.com/rbiswas4/interactivesncosmo",
+                                 "https://github.com/drphilmarshall/Bananas",
+                                 "https://github.com/Waelthus/RTFig",
+                                 "https://github.com/adrn/macro-cell",
+                                 "https://github.com/dhuppenkothen/ClassicalStatsPython",
+                                 "https://github.com/RuthAngus/nestle",
+                                 "https://github.com/sofiatti/SNClassification",
+                                 "https://github.com/ogtelford/SNClassification",
+                                 "https://github.com/jradavenport/random-forest-timeseries",
+                                 "https://github.com/sofiatti/sncosmo",
+                                 "https://github.com/drphilmarshall/AstroData",
+                                 "https://github.com/karenyyng/Bananas",
+                                 "https://github.com/adrn/Gaia-zero-day-exploit",
+                                 "https://github.com/drphilmarshall/SciAmBlogPost",
+                                 "https://github.com/bareid/xi",
+                                 "https://github.com/AstroHackWeek/astrohackweek.github.io",
+                                 "https://github.com/AstroHackWeek/website_source",
+                                 "https://github.com/brittafiore/DataScience",
+                                 "https://github.com/Waelthus/astroMLfigs",
+                                 "https://github.com/sofiatti/colormag_sncosmo"]
+
+
 '''Configuring plot for nice display'''
 fig_width_pt = 420.0  # Get this from LaTeX using \showthe\columnwidth
 inches_per_pt = 1.0 / 72.27  # Convert pt to inch
@@ -48,11 +88,11 @@ fig_height = fig_width  # *golden_mean      # height in inches
 fig_size = [fig_width, fig_height]
 
 params = {'backend': 'ps',
-          'axes.labelsize': 25,
-          'text.fontsize': 32,
-          'legend.fontsize': 18,
-          'xtick.labelsize': 20,
-          'ytick.labelsize': 20,
+          'axes.labelsize': 22,
+          'text.fontsize': 28,
+          'legend.fontsize': 12,
+          'xtick.labelsize': 18,
+          'ytick.labelsize': 18,
           'text.usetex': False,
           'figure.figsize': fig_size}
 pl.rcParams.update(params)
@@ -68,21 +108,6 @@ timestamp_astroweek = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in astro
 arbitrary_tBoundaries = ['2014-04-15 00:00:00','2015-02-20 00:00:00']
 timestamp_atB = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in arbitrary_tBoundaries]
 
-
-'''Routines to build DataFrames'''
-def prepareUserDf(df):
-    dicCreatedAt = json.loads(open(dir + "dicCreatedAt.json",'rb').read())
-    user_dic = {}
-    for u in dicCreatedAt.keys():
-        #print u,dicCreatedAt[u],len(df[(df['actor']==u) & (df['timestamp'] < timestamp_astroweek[0])])    
-        user_dic[u] = {"created_at" : datetime.strptime(dicCreatedAt[u],"%Y-%m-%dT%H:%M:%SZ"),
-                       "event_count_before" : len(df[(df['actor']==u) & (df['timestamp'] > timestamp_atB[0]) & (df['timestamp'] < timestamp_astroweek[0])]),
-                       "event_count_during" : len(df[(df['actor']==u) & (df['timestamp'] >= timestamp_astroweek[0]) & (df['timestamp'] < timestamp_astroweek[1])]),
-                       "event_count_after" : len(df[(df['actor']==u) & (df['timestamp'] >= timestamp_astroweek[1]) & (df['timestamp'] < timestamp_atB[1])])
-                       }    
-    
-    user_df = pandas.DataFrame.from_dict(user_dic,orient='index').sort(columns=["event_count_before"],ascending=False)
-    return user_df
 
 
 def countUnique(array):
@@ -188,3 +213,73 @@ def build_df_repos_created(df2014):
     
     return df_repos_created
 
+
+
+'''Routines to build DataFrames'''
+def prepareUserDf(df):
+    dicCreatedAt = json.loads(open(dir + "dicCreatedAt.json",'rb').read())
+    user_dic = {}
+    for u in dicCreatedAt.keys():
+        #print u,dicCreatedAt[u],len(df[(df['actor']==u) & (df['timestamp'] < timestamp_astroweek[0])])    
+        user_dic[u] = {"created_at" : datetime.strptime(dicCreatedAt[u],"%Y-%m-%dT%H:%M:%SZ"),
+                       "event_count_before" : len(df[(df['actor']==u) & (df['timestamp'] > timestamp_atB[0]) & (df['timestamp'] < timestamp_astroweek[0])]),
+                       "event_count_during" : len(df[(df['actor']==u) & (df['timestamp'] >= timestamp_astroweek[0]) & (df['timestamp'] < timestamp_astroweek[1])]),
+                       "event_count_after" : len(df[(df['actor']==u) & (df['timestamp'] >= timestamp_astroweek[1]) & (df['timestamp'] < timestamp_atB[1])])
+                       }    
+    
+    user_df = pandas.DataFrame.from_dict(user_dic,orient='index').sort(columns=["event_count_before"],ascending=False)
+    return user_df
+
+
+def PrepareRepoDf(df):
+    u_repo_url = np.unique(df.repo_url.values)
+    repo_dic = {}
+    for repo_url in u_repo_url[:]:
+        #print repo_url
+        created_at = df[df['repo_url']==repo_url]['repo_created_at'][0]
+        event_count = len(df[df['repo_url']==repo_url])
+        user_count = len(np.unique(df[df['repo_url']==repo_url]['actor'].values))
+        type_freq = dict(zip(*np.unique(df[df['repo_url']==repo_url]['type'].values, return_counts=True)))
+        repo_dic[repo_url] = {"event_count": event_count, "user_count" : user_count,'created_at':created_at,'type_freq':type_freq}
+
+    return repo_dic
+
+
+def exportTables(df):
+    '''This function is a copy paste from notebook. I have not tested yet, since I don't need it for now'''
+    dfAstroWeek = df[(df['timestamp'] >= timestamp_astroweek[0]) & (df['timestamp'] < timestamp_astroweek[1])]
+    
+    '''Count Events per Repo (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
+    # Jan. 2014 - Apr. 2015
+    groupCols = ["repo","repo_url","repo_created_at"]
+    path = "exports/count_events_per_repo_all.csv"
+    df.groupby(groupCols).count().sort(column='type',ascending=False).to_csv(dir + path)
+    # During AstroWeek
+    path = "exports/count_events_per_repo_astroweek.csv"
+    dfAstroWeek.groupby(groupCols).count().sort(column='type',ascending=False).to_csv(dir + path)
+    # Both tables were exported to Google Drive for manual coding
+    
+    '''Count Events by Type (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
+    # Jan. 2014 - Apr. 2015
+    df.groupby(["type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_type_all.csv")
+    # During AstroWeek
+    dfAstroWeek.groupby(["type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_type_astroweek.csv")
+    # Both tables were exported to Google Drive for manual coding
+    
+    '''Count Events by Actor and Type (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
+    # Jan. 2014 - Apr. 2015
+    df.groupby(["actor","type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_actor_and_type_all.csv")
+    # During AstroWeek
+    dfAstroWeek.groupby(["actor","type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_actor_and_type_astroweek.csv")
+    # Both tables were exported to Google Drive for manual coding   
+    
+    '''Count Events by Actor, Repo, and Type (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
+    # Jan. 2014 - Apr. 2015
+    groupCols = ["actor","repo","type","repo_url","repo_created_at"]
+    path = "exports/count_events_by_actor_repo_and_type_all.csv"
+    df.groupby(groupCols).count().sort(column='type',ascending=False).to_csv(dir + path)
+    # During AstroWeek
+    path = "exports/count_events_by_actor_repo_and_type_astroweek.csv"
+    dfAstroWeek.groupby(groupCols).count().sort(column='type',ascending=False).to_csv(dir + path)
+    # Both tables were exported to Google Drive for manual coding
+    
