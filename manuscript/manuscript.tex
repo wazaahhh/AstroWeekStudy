@@ -1,0 +1,192 @@
+\documentclass{sigchi}
+
+% If not to appear in proceedings, remove ``Permission'' sentence or comment out these two lines for final version and replace by ``Copyright is held by the author(s)
+\toappear{\small 
+%Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. \newline   \emph{WebSci'13}, May 1 -- May 5, 2013, Paris, France.\\ ACM 978-1-4503-1889-1.
+}
+\pagenumbering{arabic}% Arabic page numbers for submission. 
+
+% Use \toappear{...} to override the default ACM copyright statement (e.g. for preprints).
+
+% Load basic packages
+\usepackage{balance}  % to better equalize the last page
+\usepackage{graphics} % for EPS, load graphicx instead
+\usepackage{times}    % comment if you want LaTeX's default font
+\usepackage{url}      % llt: nicely formatted URLs
+
+% llt: Define a global style for URLs, rather that the default one
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\bf\ttfamily}}}
+\makeatother
+\urlstyle{leo}
+
+
+% To make various LaTeX processors do the right thing with page size.
+\def\pprw{8.5in}
+\def\pprh{11in}
+\special{papersize=\pprw,\pprh}
+\setlength{\paperwidth}{\pprw}
+\setlength{\paperheight}{\pprh}
+\setlength{\pdfpagewidth}{\pprw}
+\setlength{\pdfpageheight}{\pprh}
+
+% Make sure hyperref comes last of your loaded packages, 
+% to give it a fighting chance of not being over-written, 
+% since its job is to redefine many LaTeX commands.
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+pdftitle={SIGCHI Conference Proceedings Format},
+pdfauthor={LaTeX},
+pdfkeywords={SIGCHI, proceedings, archival format},
+bookmarksnumbered,
+pdfstartview={FitH},
+colorlinks,
+citecolor=black,
+filecolor=black,
+linkcolor=black,
+urlcolor=black,
+breaklinks=true,
+}
+
+% create a shortcut to typeset table headings
+\newcommand\tabhead[1]{\small\textbf{#1}}
+
+
+% End of preamble. Here it comes the document.
+\begin{document}
+
+\title{Hacking the Dynamics of Data Science \\ \vspace{0.3cm} {\LARGE {\bf Watching under the hood of open and reproducible science}} \\ \vspace{0.8cm} {\large \bf -- Preliminary version. Please do not share without authors consent. --} \vspace{0.5cm}}
+
+% Note that submissions are blind, so author information should be omitted
+\numberofauthors{2}
+\author{
+% 1st Author
+\alignauthor 
+Thomas Maillart\\
+    \affaddr{School of Information}\\
+    \affaddr{UC Berkeley}\\
+    \affaddr{102 South Hall, Berkeley, CA 94720}\\
+    \email{maillart@ischool.berkeley.edu}
+% 2nd Author
+\alignauthor 
+Charlotte Cabasse-Mazel\\
+    \affaddr{Berkeley Institute for Data Science}\\
+    \affaddr{UC Berkeley}\\
+    \affaddr{190 Doe Library, Berkeley, CA 94720}\\
+    \email{charlottecabasse@berkeley.edu}
+}
+%    \affaddr{Optional phone number}    
+%  \alignauthor 3rd Author Name\\
+%    \affaddr{Affiliation}\\
+%    \affaddr{Address}\\
+%    \email{e-mail address}\\
+%    \affaddr{Optional phone number}
+% Teaser figure can go here
+%\teaser{
+%  \centering
+%  \includegraphics{Figure1}
+%  \caption{Teaser Image}
+%  \label{fig:teaser}
+%}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+%\keywords{
+%	Guides; instructions; author's kit; conference publications;
+%	keywords should be separated by a semi-colon.
+%	\\\textcolor{red}{Mandatory section to be included in your final version.}
+%}
+
+\category{H.5.3}{[Information Systems]: Group and Organization Interfaces}{computer-supported collaborative work}
+
+%\terms{
+%	Human Factors; Design; Measurement. 
+%	If you choose more than one ACM General Term, 
+%	separate the terms with a semi-colon.
+%\\
+%\textcolor{red}{If you choose more than one ACM General Term, 
+%separate the terms with a semi-colon. See list of ACM terms at:
+%\url{http://www.sheridanprinting.com/sigchi/generalterms.htm}.
+%Optional section to be included in your final version.}
+%}
+
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/method}
+\input{sections/data}
+\input{sections/results}
+\input{sections/discussion}
+%\input{sections/limitations}
+\input{sections/conclusion}
+
+
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=0.9\columnwidth]{Figure1}
+%\caption{For images, be sure to have a good resolution image
+%  (see item D within the preparation instructions).}
+%\label{fig:figure1}
+%\end{figure}
+
+
+%\begin{table}[!b]
+%  \centering
+%  \begin{tabular}{|c|c|c|}
+%    \hline
+%    \tabhead{Objects} &
+%    \multicolumn{1}{|p{0.3\columnwidth}|}{\centering\tabhead{Caption --- pre-2002}} &
+%    \multicolumn{1}{|p{0.4\columnwidth}|}{\centering\tabhead{Caption --- 2003 and afterwards}} \\
+%    \hline
+%    Tables & Above & Below \\
+%    \hline
+%    Figures & Below & Below \\
+%    \hline
+%  \end{tabular}
+%  \caption{Table captions should be placed below the table.}
+%  \label{tab:table1}
+%\end{table}
+
+% Use figure* for figures spanning the whole page
+%\begin{figure*}[!t]
+%\centering
+%\includegraphics[width=2.0\columnwidth]{Figure2}
+%\caption{Sample of a wide figure. Be sure to place at the top of the page or bottom of the page.}
+%\label{fig:figure2}
+%\end{figure*}
+
+%\section{Acknowledgments}
+%add ack here
+
+
+% Balancing columns in a ref list is a bit of a pain because you
+% either use a hack like flushend or balance, or manually insert
+% a column break.  http://www.tex.ac.uk/cgi-bin/texfaq2html?label=balance
+% multicols doesn't work because we're already in two-column mode,
+% and flushend isn't awesome, so I choose balance.  See this
+% for more info: http://cs.brown.edu/system/software/latex/doc/balance.pdf
+%
+% Note that in a perfect world balance wants to be in the first
+% column of the last page.
+%
+% If balance doesn't work for you, you can remove that and
+% hard-code a column break into the bbl file right before you
+% submit:
+%
+% http://stackoverflow.com/questions/2149854/how-to-manually-equalize-columns-
+% in-an-ieee-paper-if-using-bibtex
+%
+% Or, just remove \balance and give up on balancing the last page.
+%
+\balance
+
+% If you want to use smaller typesetting for the reference list,
+% uncomment the following line:
+% \small
+\bibliographystyle{acm-sigchi}
+\bibliography{bib/astrohackweek}
+\end{document}

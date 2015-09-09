@@ -9,3 +9,8 @@
 *.blg
 *.toc
 *.pdf
+manuscript/HackingDataScience.synctex.gz
+
+*.gz
+
+*.gz

@@ -1,0 +1,49 @@
+\section{Method}
+This paper is the outcome of a conviction that, while the communities that we are studying are getting increasingly distributed and specialized, our methods, tools, critical and reflexive thinking should be in position to grasp this complexity. But, as any collaboration, ours is not a straightforward, linear path: Because our ethnographic study is only in its premises, we have decided to focus mainly on the quantitative methodology, engaging with the results of this analysis with field notes and observations collected during the last 6 months. We complement our quantitative findings with a qualitative approach, based on interviews and available material of ethnographic relevance (e.g., pictures, blog posts, tweets). Several informal discussions have been conducted with participants of the Astro Hack Week and one more formal interview has been conducted to share the results of this first round of quantitative analysis and gather some feedback and contextual information. It is our hope that, as this research project further unfolds, we will be able to engage deeper the discussion between our disciplines to enhance the understanding of phenomenon, which is at the same time technical and social, digital, distributed and situated.
+
+To investigate the dynamics of the Astro Hack Week, we used the self-excited Hawkes conditional Poisson process framework \cite{hawkes1974acluster}, which typically captures well a variety of social dynamics involving complex human interactions such as online viral meme propagation \cite{crane2008}, open source software development dynamics \cite{saichev2013hierarchy,sornette2014much}, gangs and crime in large American cities \cite{mohler2011}, cyber crime \cite{baldwin2012} and financial contagion \cite{ait-sahalia2010,filiminov2012}. We complement our quantitative findings with a qualitative approach, based on interviews and available material of ethnographic relevance.
+
+Self-excited Hawkes conditional Poisson processes \cite{hawkes1974acluster}, are particularly handy to account for exogenous shocks, perturbing a system, and triggering endogenous reactions by this system \cite{crane2008}. The Hawkes conditional Poisson process is defined by the intensity $I(t)$ of events at time $t$, given by
+\begin{equation}
+I(t)= \lambda(t) + \sum_{i | t_t<t}  f_i \phi(t-t_i)~,
+\label{eq:Hawkes}
+\end{equation}
+where $\{t_i, i=1, 2, ...\}$ are the timestamps of past events, $\lambda(t)$ is the exogenous rate of events, $f_{i}$ is the average fertility of events $i$ that quantifies the number of daughter (first generation) events, and $ \phi(t-t_i)$ is the memory kernel, which reflects the long-memory effects of task prioritization, and economy of time as a non storable resource \cite{maillart2011}. Here, the main exogenous shock is $\lambda(t_{0})$, with $t_{0}$ the first day of the Astro Hack Week. The second term of the right hand side of equation (\ref{eq:Hawkes}) represents the endogenous response to exogenous shocks (i.e., here, the response to the initial shock at $t_{0}$). We study the cascading process, expressed in terms of number of events triggered over time. Typical cascades of events, include debugging: A {\it push} event may be imperfect, and shall be corrected by one or several other push events (by the same person or by another community member). Similarly, a {\it pull request} event may trigger some discussion, follow-up modifications, prior to integration in the main body of work (i.e., {\it merge} event).
+
+The Hawkes model is the simplest conditional Poisson process that combines both exogenous shocks and endogenous response. The class of Hawkes models can be mapped onto the general class of branching processes \cite{daley2007}. The statistical average fertility $\langle f_i \rangle$ defines the branching ratio $n$, which is the key parameter: In the sub-critical regime ($n<1$), the average activity tends to die out exponentially fast and the exogenous source term $\lambda(t)$ controls the overall dynamics. At criticality ($n=1$), one commit is on average triggered in direct lineage by a previous commit, corresponding
+to a marginal sustainability of the process with infinitesimal exogenous inputs. The super-critical regime ($n>1$) is characterized by an explosive activity that can occur with finite probability \cite{helmstetter2002subcritical,helmstetter2003}. Many social systems have been found to operate close or at criticality, including Youtube video views \cite{crane2008}, book sales on Amazon \cite{sornette2004,deschatres2005dynamics}, and trade dynamics on financial markets \cite{filiminov2012}. One can show that the response dynamics, following an exogenous shock, follows a power law decay, 
+
+\begin{equation}
+Q(t-t_{0}) \sim 1/(t-t_{0})^{\alpha}~,~t> t_{0}
+\label{eq:critical_decay}
+\end{equation}
+
+with $Q(t-t_{0})$ the activity after the exogenous shock having occurred at $t_{0}$, and $\alpha$ the exponent. When the triggering regime is sub-critical $\langle f_i \rangle = n < 1$, the response following a shock is delayed by priority queueing, and the time response tends to follow a power law with exponent $ \alpha \approx 1.5$ \cite{maillart2011}. On the contrary, a slow power law decay ($\alpha < 1$), is a signature of critical triggering, and thus, informs on the nature of individual and collective contribution dynamics \cite{sornette2014much}. In some cases involving social interactions, it has been found that the time-response exponent may be arbitrary small \cite{saichev2013hierarchy}.
+
+With the Hawkes Poisson process framework, we are tooled to understand the dynamics triggered by the Astro Hack Week, which brought together scientists to learn collaborative coding, a number of participants had no or limited skills in open and reproducible data science. Because it was a unique event of its own kind, the Astro Hack Week may legitimately be seen as an exogenous event, bringing new people and building new social and professional ties for the purpose of consolidating the community.
+
+ %an unstructured conference, which was held at the University of Washington from September 15-19, 2014,
+%More precisely, the mere goal of the Astro Hack Week was to interact from flesh, in order to initiate online collaboration. One of the first breakout sessions on Monday, was dedicated to learning the versioning system Git and to interact with GitHub, the social coding platform. GitHub is structured around a set of events, such as {\it push, pull request, issue, and comment} events (see \cite{github_event_types} for a complete list). Thus, measuring event activity on GitHub informs on the outcomes of the short-term whereabouts and the long-term effects of the Astro Hack Week. 
+
+From GitHub data (c.f., next section), we measure the quantitative changes, which have occurred from the beginning of the Astro Hack Week, and onwards, first by considering GitHub repositories created or modified during the week, then by considering all repositories modified by participants. We consider (i) the immediate contributions dynamics during and directly related to the Astro Hack Week, (ii) the long-term spillovers only tangentially related to the hackathon, but also, (iii) the tradeoffs for senior contributors (with high seniority on GitHub) when they dedicate their time to help on-boarding new data scientists.
+
+%The empirical evidence of dynamics uncovered from the Astro Hack Week, and their aftereffects, have shed light on a number of questions, which may be best addressed through the collection on ethnographical material (e.g., from records on the Astro Hack Week website, blogposts, and tweets), as well as the interview of a senior researcher in astronomy, also deeply involved in the development of tools that promote open and reproducible science.
+
+%Our method combines cutting-edge quantitative modeling of contribution dynamics and state-of-the-art qualitative research, the gold-standard of research in Science, Technology and Society (STS) studies. This cross-nurturing allows some limitations of both methods, in the case of open and reproducible science, involving rather large communities: On the one hand, while the quantitative approach is good for interpreting the effects of a large amount of events, triggered by a variety of contributors, with heterogenous motives, it does a poor job bringing enough context to understand the social implications of these uncovered dynamics. On the other hand, the ethnographic view in STS studies, mostly focused on the qualitative description of detailed succession of actions, and their meaning, do not scale up for the systematic characterization of tens of scientists, contributing to tens of projects, in rather heterogenous and asynchronous ways, which is the increasingly the norm, as the practice of science has become increasingly inter-disciplinary, computational, and based on pooling large amounts of open data.
+
+%Two Main Components
+%\begin{itemize}
+%  \item Github
+%  \item Ipython Notebook
+%\end{itemize}
+%
+%Main dimensions:
+%
+%\begin{itemize}
+%  \item Adoption
+%  \item Boost in use
+%\end{itemize}
+
+%{\it In this paper we will focus on two tools, or platforms (Gerson, 2012) that seems to rapidly transform the way in which scientists are collaborating: the IPython Notebook (NB) and GitHub. I recent year, the IPython NB has been credited to be Ògreat for working through things interactively, virtually all my work starts here.Ó To do so we have focused our analysis on a specific event: 
+
+
