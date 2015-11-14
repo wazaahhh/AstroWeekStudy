@@ -1,0 +1,5 @@
+SELECT type, repository_name, repository_url, actor_attributes_login, created_at, repository_created_at
+  FROM  githubarchive:year.2011,githubarchive:year.2012,githubarchive:year.2013,githubarchive:year.2014
+  WHERE actor_attributes_login in ('jakevdp','ivezic','davidwhogg','profjsb','dhuppenkothen','drphilmarshall','fperez','kbarbary','jonathansick','Waelthus','nell-byler','jradavenport','gully','bareid','ogtelford','sofiatti','karenyyng','adrn','kapadia','rbiswas4','rhiannonlynne','lvrzhn','jmankin','wilmatrick','RuthAngus','nhuntwalker','ryanmaas','patti','yoachim','yalsayyad')
+  ORDER BY created_at ASC;
+  

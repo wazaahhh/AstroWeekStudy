@@ -1,0 +1,2 @@
+SELECT type, repo.name, repo.url, actor.login, created_at FROM (TABLE_DATE_RANGE([githubarchive:day.events_], TIMESTAMP('2015-01-01'), TIMESTAMP('2015-12-31') )) 
+WHERE actor.login in ('jakevdp','ivezic','davidwhogg','profjsb','dhuppenkothen','drphilmarshall','fperez','kbarbary','jonathansick','Waelthus','nell-byler','jradavenport','gully','bareid','ogtelford','sofiatti','karenyyng','adrn','kapadia','rbiswas4','rhiannonlynne','lvrzhn','jmankin','wilmatrick','RuthAngus','nhuntwalker','ryanmaas','patti','yoachim','yalsayyad') ORDER BY created_at ASC;
