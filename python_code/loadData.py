@@ -4,21 +4,22 @@ import json
 import pandas
 import scipy.stats as S
 from datetime import datetime
+import time
+
 import sys
 
-sys.path.append("/home/ubuntu/finlib_bin/modules/pymodules/")
-import finlib.statistics.pwlaw as pwlaw
+#sys.path.append("/home/ubuntu/finlib_bin/modules/pymodules/")
+#import finlib.statistics.pwlaw as pwlaw
+#sys.path.append("/home/ubuntu/github/AstroWeekStudy/python_code/")
 
-sys.path.append("/home/ubuntu/github/AstroWeekStudy/python_code/")
+#try:
+#    reload(astroWeekLib)
+#except:
+#    import astroWeekLib
 
-try:
-    reload(astroWeekLib)
-except:
-    import astroWeekLib
+#from astroWeekLib import *
 
-from astroWeekLib import *
-
-dir = "/home/ubuntu/github/AstroWeekStudy/python_code/data/"
+dir = "/Users/maithoma/github/AstroWeekStudy/python_code/data/"
 
 repos = ["https://github.com/AstroHackWeek",
          "https://github.com/bareid/xi",
@@ -102,12 +103,21 @@ pl.rcParams.update(params)
 '''Some useful time boundaries'''
 time_boundaries = ['2014-05-31 00:00:00','2015-04-15 00:00:00']
 timestamp_boundaries = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in time_boundaries]
-astroweek = ['2014-09-15 00:00:00','2014-09-20 00:00:00']
+astroweek = ['2014-09-15 00:00:00','2014-09-20 00:00:00','2015-09-28 00:00:00','2015-10-03 00:00:00']
+
+astrohack = ['2013-01-10 00:00:00','2014-01-22 00:00:00','2014-09-15 00:00:00','2015-01-08 00:00:00','2015-09-28 00:00:00']
+astrohackTS = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in astrohack]
+astrohackTS = [time.mktime(dt.timetuple()) for dt in astrohackTS]
+
+uTimeStampAstroWeek = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in astroweek]
+uTimeStampAstroWeek = [time.mktime(dt.timetuple()) for dt in uTimeStampAstroWeek]
+
 timestamp_astroweek = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in astroweek]
 
 arbitrary_tBoundaries = ['2014-04-15 00:00:00','2015-02-20 00:00:00']
 timestamp_atB = [datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in arbitrary_tBoundaries]
 
+uTimeStampJan2012 = 1325404800
 
 
 def countUnique(array):
@@ -116,51 +126,59 @@ def countUnique(array):
 
 def build_main_df(sampling_resol="1D"):
     '''
-    Main DataFrame (df): 
-    This pandas dataframe contains all timestamped events related to users 
-    identified as having taken part to AstroWeek 2014. Repositories related 
+    Main DataFrame (df):
+    This pandas dataframe contains all timestamped events related to users
+    identified as having taken part to AstroWeek 2014. Repositories related
     to events are also provided
     '''
-    
-    
+
     #Parse .csv files and create a timestamp column to merge 2014 and 2015 datasets
-    df2014 = pandas.io.parsers.read_csv(dir+"events_2014_2.csv")
-    df2014['timestamp'] = np.array([datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in df2014['created_at']])
-    
-    df2014.rename(columns={'actor_attributes_login':'actor'}, inplace=True)
-    df2014.rename(columns={'repository_name':'repo'}, inplace=True)
-    df2014.rename(columns={'repository_url':'repo_url'}, inplace=True)
-    df2014.rename(columns={'repository_created_at':'repo_created_at'}, inplace=True)
-    
-    df2015 = pandas.io.parsers.read_csv(dir+"events_2015_2.csv")
-    df2015['timestamp'] = map(datetime.fromtimestamp,df2015['created_at'])
-    
-    df2015.rename(columns={'actor_login':'actor'}, inplace=True)
-    df2015.rename(columns={'repo_name':'repo'}, inplace=True)
-    
-    df = pandas.concat([df2014,df2015])
-    
+    df2014_2014 = pandas.io.parsers.read_csv(dir+"astro2014_2014.csv") # events from community astro2014 in 2014
+    df2015_2014 = pandas.io.parsers.read_csv(dir+"astro2015_2014.csv") # events from community astro2015 in 2014
+
+    for dfiter in [df2014_2014,df2015_2014]:
+        dfiter['timestamp'] = np.array([datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in dfiter['created_at']])
+        dfiter.rename(columns={'actor_attributes_login':'actor'}, inplace=True)
+        dfiter.rename(columns={'repository_name':'repo'}, inplace=True)
+        dfiter.rename(columns={'repository_url':'repo_url'}, inplace=True)
+        dfiter.rename(columns={'repository_created_at':'repo_created_at'}, inplace=True)
+
+
+    df2014_2015 = pandas.io.parsers.read_csv(dir+"astro2014_2015.csv")
+    df2015_2015 = pandas.io.parsers.read_csv(dir+"astro2015_2015.csv")
+
+    for df2015 in [df2014_2015,df2015_2015]:
+        #print df2015.head
+        df2015['timestamp'] = np.array([datetime.strptime(dt,"%Y-%m-%d %H:%M:%S UTC") for dt in df2015['created_at']])
+        df2015.rename(columns={'actor_login':'actor'}, inplace=True)
+        df2015.rename(columns={'repo_name':'repo'}, inplace=True)
+
+    df = pandas.concat([df2014_2014,df2015_2014,df2014_2015,df2015_2015])
     df.index = df['timestamp']
-    
-    df2014['repo_created_at'] = np.array([datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in df2014['repo_created_at']])
-    
+
+    indexCond = df['repo_url'].str.contains("jonathansick-shadow")
+    index = np.argwhere(indexCond==False)
+    df = df.ix[index.flatten()]
+
+    #df2014['repo_created_at'] = np.array([datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in df2014['repo_created_at']])
+
     t_resol = sampling_resol
-    
+
     event_types = np.unique(df.type.values)
     event_dic = {}
     event_dic['all'] = df.type.resample(t_resol,how='count')
     event_count = df.type.resample(t_resol,how='count')
-    
+
     for e in event_types:
         event_dic[e] = df[df['type']==e].type.resample(t_resol,how='count')
-    
+
         if len(event_dic[e]) < len(event_count):
             event_dic[e] = fill_ommitted_resample(event_dic[e],event_count)
-        
+
         #print e,len(event_dic[e])
-    
-    
-    resampled = {"activity" : 
+
+
+    resampled = {"activity" :
                     {'events' : event_count,
                      'actors' : df.actor.resample(t_resol,how=countUnique),
                      'repos' : df.repo.resample(t_resol,how=countUnique)
@@ -169,16 +187,16 @@ def build_main_df(sampling_resol="1D"):
                 }
 
 
-    return df,df2014,df2015,resampled
+    return df,resampled
 
 def fill_ommitted_resample(df,ref_df):
-    
+
     i=0
     while ref_df.index[i] < df.index[0]:
         #print i , ref_df.index[i],df.index[0] , ref_df.index[i] < df.index[0]
         df = df.set_value(ref_df.index[i], 0)
         i+=1
-    
+
     df = df.sort_index()
 
 
@@ -187,30 +205,33 @@ def fill_ommitted_resample(df,ref_df):
         #print i,ref_df.index[-i] > df.index[-1]
         df = df.set_value(ref_df.index[i], 0)
         i-=1
-    
+
     df = df.sort_index()
-    
+
     return df
-    
-    
 
 
 
-def build_df_repos_created(df2014):
+
+
+def build_df_repos_created(df):
     '''DataFrame to handle creation dates of repos in df'''
-    voila = df2014[['repo_created_at','repo_url']]
+    voila = df[['repo_created_at','repo_url']]
     voila.sort(columns=["repo_created_at"],inplace=True)
     repo_date = np.array(zip(*voila.values)[0])
     repo_url = np.array(zip(*voila.values)[1])
     u_repo_url = np.unique(repo_url)
-    
+
     u_created_at = []
     for r in u_repo_url:
         index = np.argwhere(r==repo_url)[0]
         u_created_at.append(repo_date[index][0])
-        
+
     df_repos_created = pandas.DataFrame(data={'repo_url':u_repo_url,'repo_created_at' :u_created_at},index=u_created_at)
-    
+    df_repos_created = df_repos_created[df_repos_created.index!="nan"]
+    df_repos_created['repo_created_at'] = np.array([datetime.strptime(dt,"%Y-%m-%d %H:%M:%S") for dt in df_repos_created['repo_created_at']])
+    df_repos_created.index = df_repos_created['repo_created_at']
+
     return df_repos_created
 
 
@@ -220,13 +241,13 @@ def prepareUserDf(df):
     dicCreatedAt = json.loads(open(dir + "dicCreatedAt.json",'rb').read())
     user_dic = {}
     for u in dicCreatedAt.keys():
-        #print u,dicCreatedAt[u],len(df[(df['actor']==u) & (df['timestamp'] < timestamp_astroweek[0])])    
+        #print u,dicCreatedAt[u],len(df[(df['actor']==u) & (df['timestamp'] < timestamp_astroweek[0])])
         user_dic[u] = {"created_at" : datetime.strptime(dicCreatedAt[u],"%Y-%m-%dT%H:%M:%SZ"),
                        "event_count_before" : len(df[(df['actor']==u) & (df['timestamp'] > timestamp_atB[0]) & (df['timestamp'] < timestamp_astroweek[0])]),
                        "event_count_during" : len(df[(df['actor']==u) & (df['timestamp'] >= timestamp_astroweek[0]) & (df['timestamp'] < timestamp_astroweek[1])]),
                        "event_count_after" : len(df[(df['actor']==u) & (df['timestamp'] >= timestamp_astroweek[1]) & (df['timestamp'] < timestamp_atB[1])])
-                       }    
-    
+                       }
+
     user_df = pandas.DataFrame.from_dict(user_dic,orient='index').sort(columns=["event_count_before"],ascending=False)
     return user_df
 
@@ -248,7 +269,7 @@ def PrepareRepoDf(df):
 def exportTables(df):
     '''This function is a copy paste from notebook. I have not tested yet, since I don't need it for now'''
     dfAstroWeek = df[(df['timestamp'] >= timestamp_astroweek[0]) & (df['timestamp'] < timestamp_astroweek[1])]
-    
+
     '''Count Events per Repo (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
     # Jan. 2014 - Apr. 2015
     groupCols = ["repo","repo_url","repo_created_at"]
@@ -258,21 +279,21 @@ def exportTables(df):
     path = "exports/count_events_per_repo_astroweek.csv"
     dfAstroWeek.groupby(groupCols).count().sort(column='type',ascending=False).to_csv(dir + path)
     # Both tables were exported to Google Drive for manual coding
-    
+
     '''Count Events by Type (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
     # Jan. 2014 - Apr. 2015
     df.groupby(["type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_type_all.csv")
     # During AstroWeek
     dfAstroWeek.groupby(["type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_type_astroweek.csv")
     # Both tables were exported to Google Drive for manual coding
-    
+
     '''Count Events by Actor and Type (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
     # Jan. 2014 - Apr. 2015
     df.groupby(["actor","type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_actor_and_type_all.csv")
     # During AstroWeek
     dfAstroWeek.groupby(["actor","type"]).count().sort(column='type',ascending=False).to_csv(dir + "exports/count_events_by_actor_and_type_astroweek.csv")
-    # Both tables were exported to Google Drive for manual coding   
-    
+    # Both tables were exported to Google Drive for manual coding
+
     '''Count Events by Actor, Repo, and Type (from Jan. 2014 until and Apr. 2015  & during AstroWeek)'''
     # Jan. 2014 - Apr. 2015
     groupCols = ["actor","repo","type","repo_url","repo_created_at"]
@@ -282,4 +303,3 @@ def exportTables(df):
     path = "exports/count_events_by_actor_repo_and_type_astroweek.csv"
     dfAstroWeek.groupby(groupCols).count().sort(column='type',ascending=False).to_csv(dir + path)
     # Both tables were exported to Google Drive for manual coding
-    
