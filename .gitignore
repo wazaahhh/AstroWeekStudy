@@ -8,9 +8,16 @@
 *.bbl
 *.blg
 *.toc
-*.pdf
 manuscript/HackingDataScience.synctex.gz
 
 *.gz
 
 *.gz
+
+*eps-converted-to.pdf
+
+manuscript/AstroHackWeekStudy.pdf
+manuscript/manuscript.pdf
+manuscript/HackingDataScience.pdf
+
+manuscript/ci_abstract/poster_CI2016_sized_fedex.pdf
